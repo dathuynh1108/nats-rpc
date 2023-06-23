@@ -44,12 +44,11 @@ func (s *serverTransportStream) SetTrailer(md metadata.MD) error {
 
 func serverUnaryHandler(srv interface{}, handler serverMethodHandler) handlerFunc {
 	return func(s *serverStream) {
-		var interceptor grpc.UnaryServerInterceptor = nil
 		ctx := grpc.NewContextWithServerTransportStream(s.Context(), &serverTransportStream{stream: s})
 		if s.md != nil {
 			ctx = metadata.NewIncomingContext(ctx, s.md)
 		}
-		response, err := handler(srv, ctx, s.RecvMsg, interceptor)
+		response, err := handler(srv, ctx, s.RecvMsg, s.server.opts.unaryInt)
 		if s.ctx.Err() == nil {
 			if err != nil {
 				s.close(err)
@@ -62,9 +61,20 @@ func serverUnaryHandler(srv interface{}, handler serverMethodHandler) handlerFun
 	}
 }
 
-func serverStreamHandler(srv interface{}, handler grpc.StreamHandler) handlerFunc {
+func serverStreamHandler(srv interface{}, sd grpc.StreamDesc, handler grpc.StreamHandler) handlerFunc {
 	return func(s *serverStream) {
-		err := handler(srv, s)
+		var err error
+		if s.server.opts.streamInt == nil {
+			err = handler(srv, s)
+		} else {
+			info := &grpc.StreamServerInfo{
+				FullMethod:     s.Method(),
+				IsClientStream: sd.ClientStreams,
+				IsServerStream: sd.ServerStreams,
+			}
+			err = s.server.opts.streamInt(srv, s, info, handler)
+		}
+
 		if s.ctx.Err() == nil {
 			s.close(err)
 		}
@@ -276,6 +286,7 @@ func (s *Server) RegisterService(sd *grpc.ServiceDesc, ss interface{}) {
 	sub, _ := s.nc.QueueSubscribe(subject, sd.ServiceName, s.onMessage)
 
 	s.subs[sd.ServiceName] = sub
+
 	for _, it := range sd.Methods {
 		desc := it
 		path := fmt.Sprintf("%v.%v", prefix, desc.MethodName)
@@ -285,7 +296,7 @@ func (s *Server) RegisterService(sd *grpc.ServiceDesc, ss interface{}) {
 	for _, it := range sd.Streams {
 		desc := it
 		path := fmt.Sprintf("%v.%v", prefix, desc.StreamName)
-		s.handlers[path] = serverStreamHandler(ss, desc.Handler)
+		s.handlers[path] = serverStreamHandler(ss, it, desc.Handler)
 		s.log.Infof("RegisterService: stream path => %v", path)
 	}
 	s.nc.Flush()
