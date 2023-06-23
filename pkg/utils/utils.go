@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/cloudwebrtc/nats-grpc/pkg/protos/nrpc"
+	"github.com/dathuynh1108/nats-rpc/pkg/protos/nrpc"
 	"github.com/nats-io/nats.go"
 	"google.golang.org/grpc/metadata"
 )

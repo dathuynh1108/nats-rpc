@@ -7,8 +7,8 @@ import (
 	"io"
 	"sync"
 
-	"github.com/cloudwebrtc/nats-grpc/pkg/protos/nrpc"
-	"github.com/cloudwebrtc/nats-grpc/pkg/utils"
+	"github.com/dathuynh1108/nats-rpc/pkg/protos/nrpc"
+	"github.com/dathuynh1108/nats-rpc/pkg/utils"
 	"github.com/nats-io/nats.go"
 	log "github.com/pion/ion-log"
 	"github.com/sirupsen/logrus"
@@ -215,11 +215,15 @@ type Server struct {
 	subs     map[string]*nats.Subscription
 	nid      string
 	services map[string]*serviceInfo // service name -> service info
-	opts     serverOptions
+	opts     *serverOptions
 }
 
 // NewServer creates a new Proxy
-func NewServer(nc NatsConn, nid string, options ...serverOptions) *Server {
+func NewServer(nc NatsConn, nid string, options ...ServerOption) *Server {
+	opts := &serverOptions{}
+	for _, o := range options {
+		o.apply(opts)
+	}
 	s := &Server{
 		nc:       nc,
 		handlers: make(map[string]handlerFunc),
@@ -230,6 +234,9 @@ func NewServer(nc NatsConn, nid string, options ...serverOptions) *Server {
 		nid:      nid,
 		opts:     opts,
 	}
+
+	chainUnaryServerInterceptors(s)
+	chainStreamServerInterceptors(s)
 
 	s.ctx, s.cancel = context.WithCancel(context.Background())
 	return s

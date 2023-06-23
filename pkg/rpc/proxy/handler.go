@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	nrpc "github.com/cloudwebrtc/nats-grpc/pkg/rpc"
+	nrpc "github.com/dathuynh1108/nats-rpc/pkg/rpc"
 )
 
 var (

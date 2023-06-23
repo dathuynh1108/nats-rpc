@@ -7,8 +7,8 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/cloudwebrtc/nats-grpc/examples/protos/echo"
-	"github.com/cloudwebrtc/nats-grpc/pkg/rpc"
+	"github.com/dathuynh1108/nats-rpc/examples/protos/echo"
+	"github.com/dathuynh1108/nats-rpc/pkg/rpc"
 	"github.com/nats-io/nats.go"
 	log "github.com/pion/ion-log"
 	"google.golang.org/grpc"

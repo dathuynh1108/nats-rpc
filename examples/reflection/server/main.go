@@ -6,9 +6,9 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/cloudwebrtc/nats-grpc/examples/protos/echo"
-	"github.com/cloudwebrtc/nats-grpc/pkg/rpc"
-	"github.com/cloudwebrtc/nats-grpc/pkg/rpc/reflection"
+	"github.com/dathuynh1108/nats-rpc/examples/protos/echo"
+	"github.com/dathuynh1108/nats-rpc/pkg/rpc"
+	"github.com/dathuynh1108/nats-rpc/pkg/rpc/reflection"
 	"github.com/nats-io/nats.go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

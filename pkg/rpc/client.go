@@ -8,8 +8,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/cloudwebrtc/nats-grpc/pkg/protos/nrpc"
-	"github.com/cloudwebrtc/nats-grpc/pkg/utils"
+	"github.com/dathuynh1108/nats-rpc/pkg/protos/nrpc"
+	"github.com/dathuynh1108/nats-rpc/pkg/utils"
 	"github.com/nats-io/nats.go"
 	log "github.com/pion/ion-log"
 	"github.com/sirupsen/logrus"

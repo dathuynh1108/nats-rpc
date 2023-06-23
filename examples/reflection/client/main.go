@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	nrpc "github.com/cloudwebrtc/nats-grpc/pkg/rpc"
-	"github.com/cloudwebrtc/nats-grpc/pkg/rpc/reflection"
+	nrpc "github.com/dathuynh1108/nats-rpc/pkg/rpc"
+	"github.com/dathuynh1108/nats-rpc/pkg/rpc/reflection"
 	"github.com/jhump/protoreflect/grpcreflect"
 	"github.com/nats-io/nats.go"
 	log "github.com/pion/ion-log"

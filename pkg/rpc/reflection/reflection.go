@@ -9,7 +9,7 @@ import (
 	"github.com/jhump/protoreflect/dynamic"
 	"github.com/pkg/errors"
 
-	perrors "github.com/cloudwebrtc/nats-grpc/pkg/rpc/reflection/errors"
+	perrors "github.com/dathuynh1108/nats-rpc/pkg/rpc/reflection/errors"
 )
 
 // MethodInvocation contains a method and a message used to invoke an RPC
